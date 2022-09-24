@@ -1,48 +1,57 @@
 import React from 'react'
-import { useState } from 'react'
-import ModalCorrect from '../ModalCorrect/ModalCorrect'
+import { useState, useEffect } from 'react'
 import styles from './product.module.scss'
+import Button from '@mui/material/Button';
 
 const Product = (props) => {
-  const [active, setActive] = useState(true)
-  const activeProduct = active ? 'border' : 'border active'
-  const btn = document.getElementsByClassName(styles.btn_remove)
-  const [modal, setModal] = useState(false)
-  const openModal = modal ? styles.modal : styles.hide
-  const [disabled, setDiseabled] = useState(false);
-  const [modalCorrect, setModalCorrect] = useState(false)
+  const [active, setActive] = useState(false);
 
+  const [modal, setModal] = useState(false);
+  const openModal = modal ? styles.modal : styles.hide;
 
-  // console.log(props.item)
+  const [modalCorrect, setModalCorrect] = useState(false);
+
+  // console.log(props)
 
   const changeActiveTask = (e) => {
-    // console.log(props.item)
-
-    setActive((previousState) => !previousState)
-    setModal((previousState) => !previousState)
+    e.stopPropagation();
+    props.chooseItem(props.item.id);
   }
 
-  const removeProduct = (item) => {
-    setActive((previousState) => !previousState)
-    setModal((previousState) => !previousState)
-    let btnRemove = window.confirm('Удалить товар?')
-    if (btnRemove) {
-      props.setProducts(props.products.filter((p) => p.id !== item.id))
+  useEffect(() => {
+    if (props.item.active) {
+      setModal(true)
+    } else {
+      setModal(false)
     }
-  }
+  }, [props.products])
 
-  const del = () => {
 
-    setModal((previousState) => !previousState)
-    // setActive((previousState) => !previousState)
+  const correctGood = (e) => {
+    e.stopPropagation()
+    props.addDisabledBtnCorrect(true);
+    props.addDisabledBtnRemove(true);
+    props.setBtnNewGood(true);
+    if(!props.btnCorrect){
+      console.log(props.item.id)
+      props.setGoodName(props.item.nameGood);
+      props.setPrice(props.item.price);
+      props.setCount(props.item.count)
+      props.setCorrectModal(true);
+    }
+
   }
 
   return (
     <div className={styles.catalog__column}>
-      {/* <div className={styles.item_catalog}> */}
       <div
-        className={activeProduct + ' ' + styles.new}
-        onClick={changeActiveTask}
+        style={{
+          border: props.item.active ? '2px solid #5ca6ec' : 'none',
+          boxShadow: props.item.active ? '10px 5px 5px #5ca6ec' : 'none',
+          width: props.item.active ? '80%' : '100%'
+        }}
+        className={styles.new}
+        onClick={(e) => changeActiveTask(e)}
       >
         <div className={styles.item_catalog__image + '' + styles._img}>
           <img
@@ -71,31 +80,41 @@ const Product = (props) => {
               Количество шт: <span>{props.item.count}</span>
             </p>
           </div>
-          <button onClick={del} className={styles.btn_correct}>
+
+          <div className={styles.flex}>
+          <Button variant="contained" size="small"
+         disabled={props.btnCorrect} onClick={correctGood}
+         >редактировать</Button>
+         {/* <button disabled={props.btnCorrect} onClick={correctGood} className={styles.btn_correct}>
             редактировать
-          </button>
-          <button disabled={disabled}
+          </button> */}
+          </div>
+
+          <div className={styles.flex}>
+          <Button variant="contained" size="small"
+         disabled={props.btnRemove}
+         onClick={(e) => props.removeProduct(e,props.item)}
+         >удалить</Button>
+         {/* <button
+            disabled={props.btnRemove}
             className={styles.btn_remove}
-            onClick={() => removeProduct(props.item)}
+            onClick={(e) => props.removeProduct(e, props.item)}
           >
             Удалить
-          </button>
+          </button> */}
+          </div>
+
         </div>
       </div>
-      {/* </div> */}
-      <div className={openModal}>
+      <div
+        className={openModal}
+      >
         <div className={styles.body_modal}>
           <p>{props.item.nameGood} </p>
           <p>{props.item.price} </p>
           <p>шт:{props.item.count} </p>
         </div>
       </div>
-
-      <div >
-      {/* <ModalCorrect item={props.item} /> */}
-      </div>
-
-      {/* <div className={activeProduct + ' ' + styles.new}   onClick={changeActiveTask}></div> */}
     </div>
   )
 }
