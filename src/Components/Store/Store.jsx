@@ -9,7 +9,7 @@ import  New  from '../New/New';
 // const ItemContext = createContext();
 
 
-const TextContainer = createContext();
+// const TextContainer = createContext();
 
 
 const Store = (props) => {
@@ -27,7 +27,7 @@ const Store = (props) => {
   const [correctModal, setCorrectModal] = useState(false);
   const openCorrectModal = correctModal ? 'display' : 'hide';
 
-  const baseUrl = 'http://localhost:3001/data';
+  const baseUrl = 'http://localhost:3000/data';
 
 
   useEffect(() => {
@@ -71,7 +71,7 @@ const Store = (props) => {
 
 
   return (
-    <TextContainer.Provider value={text}>
+    // <TextContainer.Provider value={text}>
     <div className={'products'}  >
       <div className={'products'}>
         {products.map((item) => (
@@ -100,10 +100,10 @@ const Store = (props) => {
       {/* <div className={openCorrectModal}>
         <ModalCorrect setProducts={setProducts} setGoodName={setGoodName} goodName={goodName} price={price} products={products} count={count} setCorrectModal={setCorrectModal}  setBtnNewGood={setBtnNewGood} setBtnCorrect={setBtnCorrect} setBtnRemove={setBtnRemove}  />
       </div> */}
-      <New/>
+      {/* <New/> */}
     </div>
-    </TextContainer.Provider>
+    // </TextContainer.Provider>
   )
 }
 
-export default {Store, TextContainer}
+export default Store

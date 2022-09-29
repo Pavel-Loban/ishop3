@@ -21,24 +21,24 @@ function App() {
 
   return (
 
-    <>
+    <div>
       <Header />
       <Container
       sx={{mt: '1rem'}}
       >
-        {/* <div className="App"> */}
+        <div className="App">
 
           <h1 className={'title'} >Каталог товаров</h1>
           <Store  onProductItem={onProductItem}/>
           {/* <NewProduct dis={props.btnNewGood} /> */}
           {/* <MaterialButton title={'Редактировать'} /> */}
-        {/* </div> */}
+        </div>
       </Container>
 
-    </>
+    </div>
 
   );
 
 }
 
-export default {App};
+export default App;

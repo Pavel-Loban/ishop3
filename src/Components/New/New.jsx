@@ -1,16 +1,17 @@
 import React from 'react';
 import { useContext } from 'react';
-import { TextContainer } from "../Store/Store"
+// import { TextContainer } from "../Store/Store"
 
 const New = () => {
 
-    const context = useContext(TextContainer)
+    // const context = useContext(TextContainer)
 
     return (
         <div>
-            {context}
+            dfsdgh
+            {/* {context} */}
         </div>
     );
 };
 
-export default {New};
+export default New;
