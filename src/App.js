@@ -1,20 +1,26 @@
 
-import React from "react";
+import React, { useState} from "react";
 import './App.scss';
 
 import NewProduct from "./Components/NewProduct/NewProduct";
 import Header from "./Components/Header/Header";
-import Store from "./Components/Store/Store";
 import { Container } from "@mui/system";
-
-
+import Store from "./Components/Store/Store";
 
 
 function App() {
 
 
 
+  const [oneProduct, setOneProduct] = useState(3)
+  const onProductItem = (id) => {
+    setOneProduct(id)
+    console.log(id)
+  }
+
+
   return (
+
     <>
       <Header />
       <Container
@@ -23,15 +29,16 @@ function App() {
         {/* <div className="App"> */}
 
           <h1 className={'title'} >Каталог товаров</h1>
-          <Store />
+          <Store  onProductItem={onProductItem}/>
           {/* <NewProduct dis={props.btnNewGood} /> */}
           {/* <MaterialButton title={'Редактировать'} /> */}
         {/* </div> */}
       </Container>
 
     </>
+
   );
 
 }
 
-export default App;
+export default {App};

@@ -1,26 +1,34 @@
 import React from 'react'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, createContext } from 'react'
 import './store.scss'
 import Product from '../Product/Product'
 import NewProduct from '../NewProduct/NewProduct'
-import ModalCorrect from '../ModalCorrect/ModalCorrect'
 import axios from 'axios'
+import  New  from '../New/New';
 
-const Store = () => {
-  const [products, setProducts] = useState([])
-  const [delProduct, setDelProducts] = useState('')
-  const [btnNewGood, setBtnNewGood] = useState(false)
-  const [btnCorrect, setBtnCorrect] = useState(false)
-  const [btnRemove, setBtnRemove] = useState(false)
+// const ItemContext = createContext();
 
-  const [correctModal, setCorrectModal] = useState(false)
+
+const TextContainer = createContext();
+
+
+const Store = (props) => {
+
+
+
+  let text = 'First <br> second <br /> third <br /> last<br />';
+  // console.log(props)
+  const [products, setProducts] = useState([]);
+  const [delProduct, setDelProducts] = useState('');
+  const [btnNewGood, setBtnNewGood] = useState(false);
+  const [btnCorrect, setBtnCorrect] = useState(false);
+  const [btnRemove, setBtnRemove] = useState(false);
+
+  const [correctModal, setCorrectModal] = useState(false);
   const openCorrectModal = correctModal ? 'display' : 'hide';
 
-  const baseUrl = 'http://localhost:3001/data'
+  const baseUrl = 'http://localhost:3001/data';
 
-  const [goodName, setGoodName] = useState('')
-  const [price, setPrice] = useState('')
-  const [count, setCount] = useState('')
 
   useEffect(() => {
     axios.get(baseUrl).then((res) => {
@@ -35,14 +43,11 @@ const Store = () => {
     setBtnRemove(false);
     setBtnNewGood(false);
     const newArr = products.map((item) =>
-      item.id === id ? { ...item, active: true } : { ...item, active: false },
+      item.id === id ? { ...item, active: true } : { ...item, active: false }
     )
-    setProducts(newArr)
+    setProducts(newArr);
 
-    if (btnCorrect) {
-      setCorrectModal(false)
-      console.log('ooo')
-    }
+
   }
 
   const addDisabledBtnCorrect = (add) => {
@@ -62,8 +67,12 @@ const Store = () => {
     }
   }
 
+
+
+
   return (
-    <div className={'products'}>
+    <TextContainer.Provider value={text}>
+    <div className={'products'}  >
       <div className={'products'}>
         {products.map((item) => (
           <Product
@@ -73,6 +82,8 @@ const Store = () => {
             products={products}
             chooseItem={chooseItem}
             setBtnNewGood={setBtnNewGood}
+            setBtnCorrect={setBtnCorrect}
+            setBtnRemove={setBtnRemove}
             btnCorrect={btnCorrect}
             addDisabledBtnCorrect={addDisabledBtnCorrect}
             addDisabledBtnRemove={addDisabledBtnRemove}
@@ -80,18 +91,19 @@ const Store = () => {
             removeProduct={removeProduct}
             correctModal={correctModal}
             setCorrectModal={setCorrectModal}
-            setGoodName={setGoodName}
-            setPrice={setPrice}
-            setCount={setCount}
+            onProductItem={props.onProductItem}
           />
         ))}
       </div>
+
       <NewProduct btnNewGood={btnNewGood} />
-      <div className={openCorrectModal}>
+      {/* <div className={openCorrectModal}>
         <ModalCorrect setProducts={setProducts} setGoodName={setGoodName} goodName={goodName} price={price} products={products} count={count} setCorrectModal={setCorrectModal}  setBtnNewGood={setBtnNewGood} setBtnCorrect={setBtnCorrect} setBtnRemove={setBtnRemove}  />
-      </div>
+      </div> */}
+      <New/>
     </div>
+    </TextContainer.Provider>
   )
 }
 
-export default Store
+export default {Store, TextContainer}

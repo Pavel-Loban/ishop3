@@ -1,7 +1,10 @@
 import React from 'react'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, createContext} from 'react'
 import styles from './product.module.scss'
 import Button from '@mui/material/Button';
+import ModalCorrect from '../ModalCorrect/ModalCorrect'
+
+
 
 const Product = (props) => {
   const [active, setActive] = useState(false);
@@ -11,11 +14,20 @@ const Product = (props) => {
 
   const [modalCorrect, setModalCorrect] = useState(false);
 
+  const [correctModal, setCorrectModal] = useState(false)
+  const openCorrectModal = correctModal ? styles.display : styles.hide;
   // console.log(props)
 
   const changeActiveTask = (e) => {
     e.stopPropagation();
     props.chooseItem(props.item.id);
+    props.onProductItem(props.item.id)
+    setCorrectModal(false);
+    if(e.target.closest(styles.catalog__column)){
+      setCorrectModal(false);
+    }
+
+
   }
 
   useEffect(() => {
@@ -29,18 +41,17 @@ const Product = (props) => {
 
   const correctGood = (e) => {
     e.stopPropagation()
+    props.chooseItem(props.item.id);
     props.addDisabledBtnCorrect(true);
     props.addDisabledBtnRemove(true);
     props.setBtnNewGood(true);
     if(!props.btnCorrect){
-      console.log(props.item.id)
-      props.setGoodName(props.item.nameGood);
-      props.setPrice(props.item.price);
-      props.setCount(props.item.count)
-      props.setCorrectModal(true);
+      // console.log(props.item.id)
+      setCorrectModal(true);
+      // console.log('k')
     }
-
   }
+
 
   return (
     <div className={styles.catalog__column}>
@@ -72,7 +83,7 @@ const Product = (props) => {
         <div className={styles.item_action}>
           <div className={styles.item_price}>
             <span className={styles.item_price + '' + styles.item_action_text}>
-              {props.item.price}
+              {props.item.price}$
             </span>
           </div>
           <div className={styles.item_info}>
@@ -111,9 +122,21 @@ const Product = (props) => {
       >
         <div className={styles.body_modal}>
           <p>{props.item.nameGood} </p>
-          <p>{props.item.price} </p>
+          <p>{props.item.price} $ </p>
           <p>шт:{props.item.count} </p>
         </div>
+      </div>
+      <div
+      className={openCorrectModal}
+      >
+        <ModalCorrect
+        item={props.item}
+        correctModal={correctModal}
+        setCorrectModal={setCorrectModal}
+        setBtnNewGood={props.setBtnNewGood}
+        setBtnRemove={props.setBtnRemove}
+        setBtnCorrect={props.setBtnCorrect}
+         />
       </div>
     </div>
   )
